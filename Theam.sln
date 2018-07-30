@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Theam", "Theam\Theam.csproj", "{CBA6E20B-724E-4398-A688-457D0B42109B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Theam.API", "Theam\Theam.API.csproj", "{CBA6E20B-724E-4398-A688-457D0B42109B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{C0E4436A-0107-413F-A76C-9CE3B12240C6}"
 EndProject
