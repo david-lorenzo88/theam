@@ -15,14 +15,17 @@ using Theam.API.Utils;
 using System.Net;
 using Theam.API.Filters;
 using System.Linq;
+using System.IO;
 
 namespace Theam
 {
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            Directory.CreateDirectory(Configuration["Settings:DatabaseDirectory"]);
         }
 
         public IConfiguration Configuration { get; }
