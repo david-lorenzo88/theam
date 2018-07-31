@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  theam.api:
+    image: ${DOCKER_REGISTRY}theamapi
+    build:
+      context: .
+      dockerfile: Theam/Dockerfile

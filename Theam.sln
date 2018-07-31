@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Theam.API", "Theam\Theam.API.csproj", "{CBA6E20B-724E-4398-A688-457D0B42109B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Theam.API", "Theam\Theam.API.csproj", "{CBA6E20B-724E-4398-A688-457D0B42109B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{C0E4436A-0107-413F-A76C-9CE3B12240C6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{5F02E814-87C2-4A00-B630-295E92CE8E51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Theam.Tests", "Theam.Tests\Theam.Tests.csproj", "{BC30EB3B-A2A1-4129-ACAF-4BAD45B98E01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Theam.Tests", "Theam.Tests\Theam.Tests.csproj", "{BC30EB3B-A2A1-4129-ACAF-4BAD45B98E01}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{AF0A6187-1105-48D3-9D88-EFF402B58623}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +27,10 @@ Global
 		{BC30EB3B-A2A1-4129-ACAF-4BAD45B98E01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC30EB3B-A2A1-4129-ACAF-4BAD45B98E01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC30EB3B-A2A1-4129-ACAF-4BAD45B98E01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF0A6187-1105-48D3-9D88-EFF402B58623}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF0A6187-1105-48D3-9D88-EFF402B58623}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF0A6187-1105-48D3-9D88-EFF402B58623}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF0A6187-1105-48D3-9D88-EFF402B58623}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
