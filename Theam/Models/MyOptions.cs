@@ -10,5 +10,6 @@ namespace Theam.API.Models
         public string SecurityKey { get; set; }
         public string Domain { get; set; }
         public string ImagesUploadPath { get; set; }
+        public string ImagesBaseUrl { get; set; }
     }
 }

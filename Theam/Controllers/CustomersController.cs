@@ -11,8 +11,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Theam.API.Data;
+using Theam.API.Filters;
 using Theam.API.Models;
 using Theam.API.Repositories;
+using Theam.API.Utils;
 
 namespace Theam.API.Controllers
 {
@@ -35,7 +37,7 @@ namespace Theam.API.Controllers
         [HttpGet]
         public async Task<ActionResult<BaseResponse<CustomerDTO[]>>> Get()
         {
-            return CreateResponse(true, _mapper.Map<CustomerDTO[]>(await _repo.Get()));
+            return CreateResponse(true, ImagesHelper.FillImagesURL(_mapper.Map<CustomerDTO[]>(await _repo.Get()), _options.ImagesBaseUrl));
         }
 
         // GET api/values/5
@@ -47,7 +49,7 @@ namespace Theam.API.Controllers
             {
                 return CreateResponse<CustomerDTO>(false, null, "Customer not found");
             }
-            return CreateResponse(true, _mapper.Map<CustomerDTO>(customers.First()));
+            return CreateResponse(true, ImagesHelper.FillImagesURL(_mapper.Map<CustomerDTO>(customers.First()), _options.ImagesBaseUrl));
         }
 
         // POST api/values
@@ -56,6 +58,10 @@ namespace Theam.API.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return CreateResponse<CustomerDTO>(false, null, GetModelStateErrors()); 
+                }
                 var user = await GetCurrentUser();
 
                 customer.UserCreated = user;
@@ -75,7 +81,7 @@ namespace Theam.API.Controllers
                 _repo.Add(dao);
                 await _repo.SaveAsync();
                 customer.Id = dao.Id;
-                return CreateResponse(true, customer);
+                return CreateResponse(true, ImagesHelper.FillImagesURL(customer, _options.ImagesBaseUrl));
             }
             catch (Exception ex)
             {
@@ -89,6 +95,11 @@ namespace Theam.API.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return CreateResponse<CustomerDTO>(false, null, GetModelStateErrors());
+                }
+
                 var customers = await _repo.Get(u => u.Id == id);
 
                 if (customers == null || customers.Length == 0)
@@ -120,7 +131,7 @@ namespace Theam.API.Controllers
                 _repo.Update(_mapper.Map<Customer>(customer));
                 await _repo.SaveAsync();
 
-                return CreateResponse(true, customer);
+                return CreateResponse(true, ImagesHelper.FillImagesURL(customer, _options.ImagesBaseUrl));
             }
             catch (Exception ex)
             {

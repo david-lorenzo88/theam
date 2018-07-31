@@ -9,6 +9,10 @@
     <Compile Remove="Migrations\20180726185356_InitialMigration.Designer.cs" />
     <Compile Remove="Migrations\20180726185446_InitialMigration.cs" />
     <Compile Remove="Migrations\20180726185446_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20180730103647_InitialMigration.cs" />
+    <Compile Remove="Migrations\20180730103647_InitialMigration.Designer.cs" />
+    <Compile Remove="Migrations\20180731084604_requiredFields.cs" />
+    <Compile Remove="Migrations\20180731084604_requiredFields.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -84,6 +85,19 @@ namespace Theam.API.Controllers
             {
                 return false;
             }
+        }
+
+        protected string GetModelStateErrors()
+        {
+            StringBuilder b = new StringBuilder();
+            foreach (var value in ModelState.Values)
+            {
+                foreach (var error in value.Errors)
+                {
+                    b.AppendFormat("{0} ", error.ErrorMessage);
+                }
+            }
+            return b.ToString();
         }
     }
 }

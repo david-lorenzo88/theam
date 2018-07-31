@@ -48,6 +48,10 @@ namespace Theam.API.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return CreateResponse<UserDTO>(false, null, GetModelStateErrors());
+                }
                 user.Password = PasswordHasherHelper.ComputePassword(user.Password);
                 _userRepo.Add(_mapper.Map<User>(user));
                 await _userRepo.SaveAsync();
@@ -65,6 +69,10 @@ namespace Theam.API.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return CreateResponse<UserDTO>(false, null, GetModelStateErrors());
+                }
                 var users = await _userRepo.Get(u => u.Id == id);
 
                 if (users == null || users.Length == 0)

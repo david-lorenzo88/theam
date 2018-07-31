@@ -13,6 +13,8 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Theam.API.Utils;
 using System.Net;
+using Theam.API.Filters;
+using System.Linq;
 
 namespace Theam
 {
@@ -62,7 +64,15 @@ namespace Theam
             services.AddScoped<IRepository<User>, Repository<User>>();
 
             services.AddAutoMapper(x => x.AddProfile(new MappingsProfile()));
+
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -82,7 +92,7 @@ namespace Theam
             app.UseHttpsRedirection();
 
             app.UseStaticFiles();
-            
+
             app.UseMvc();
         }
     }
