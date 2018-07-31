@@ -74,7 +74,7 @@ namespace Theam.Tests
         public async Task CustomersList(string controllerName)
         {
             var token = await GetToken("joanaydavid@gmail.com", "David123");
-
+            
             _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
             using (var content = new MultipartFormDataContent("Upload----" + DateTime.Now.ToString(CultureInfo.InvariantCulture)))
