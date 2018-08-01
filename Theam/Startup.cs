@@ -16,6 +16,8 @@ using System.Net;
 using Theam.API.Filters;
 using System.Linq;
 using System.IO;
+using Swashbuckle.AspNetCore.Swagger;
+using System.Collections.Generic;
 
 namespace Theam
 {
@@ -73,6 +75,24 @@ namespace Theam
                 options.SuppressModelStateInvalidFilter = true;
             });
 
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "Theam CRM API", Version = Configuration["Settings:APIVersion"], Contact = new Contact { Email = "dlorenzo.1988@gmail.com", Name = "David Lorenzo López", Url = "https://github.com/david-lorenzo88" }, Description = "CRM Test API created for Theam's hiring process" });
+
+                var security = new Dictionary<string, IEnumerable<string>>
+                {
+                    {"Bearer", new string[] { }},
+                };
+                c.AddSecurityDefinition("Bearer", new ApiKeyScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = "header",
+                    Type = "apiKey"
+                });
+                c.AddSecurityRequirement(security);
+            });
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
 
@@ -95,6 +115,15 @@ namespace Theam
             app.UseHttpsRedirection();
 
             app.UseStaticFiles();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/"+ Configuration["Settings:APIVersion"] + "/swagger.json", "Theam CRM API");
+                c.DocumentTitle = "Theam CRM API";
+                c.DocExpansion(DocExpansion.None);
+                
+            });
 
             app.UseMvc();
         }
