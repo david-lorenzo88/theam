@@ -6,6 +6,9 @@ using Theam.API.Models;
 
 namespace Theam.API.Utils
 {
+    /// <summary>
+    /// Helper class to manage images url
+    /// </summary>
     public class ImagesHelper
     {
         public static CustomerDTO[] FillImagesURL(CustomerDTO[] customers, string baseUrl)

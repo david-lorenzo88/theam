@@ -13,6 +13,9 @@ using Theam.API.Utils;
 
 namespace Theam.API.Controllers
 {
+    /// <summary>
+    /// Controller that manages the user data
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Policy = Constants.POLICIY_ADMIN_USER)]
@@ -22,14 +25,21 @@ namespace Theam.API.Controllers
         public UsersController(IRepository<User> repo, IMapper mapper) : base(mapper, repo)
         {
         }
-        // GET api/values
+        /// <summary>
+        /// Gets the users list
+        /// </summary>
+        /// <returns>the users list</returns>
         [HttpGet]
         public async Task<ActionResult<BaseResponse<UserDTO[]>>> Get()
         {
             return CreateResponse(true, _mapper.Map<UserDTO[]>(await _userRepo.Get()));
         }
 
-        // GET api/values/5
+        /// <summary>
+        /// Gets a user by id
+        /// </summary>
+        /// <param name="id">Id of the user</param>
+        /// <returns>the user data</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<BaseResponse<UserDTO>>> Get(int id)
         {
@@ -42,7 +52,11 @@ namespace Theam.API.Controllers
             return CreateResponse(true, _mapper.Map<UserDTO>(users.First()));
         }
 
-        // POST api/values
+        /// <summary>
+        /// Inserts a user in the system
+        /// </summary>
+        /// <param name="user">the user data</param>
+        /// <returns>the user data with assigned ID</returns>
         [HttpPost]
         public async Task<ActionResult<BaseResponse<UserDTO>>> Post([FromBody] UserDTO user)
         {
@@ -63,7 +77,12 @@ namespace Theam.API.Controllers
             }
         }
 
-        // PUT api/values/5
+        /// <summary>
+        /// Updates a user in the system
+        /// </summary>
+        /// <param name="id">the user ID</param>
+        /// <param name="customer">the user data</param>
+        /// <returns>the user data</returns>
         [HttpPut("{id}")]
         public async Task<ActionResult<BaseResponse<UserDTO>>> Put(int id, [FromBody] UserDTO user)
         {
@@ -95,7 +114,11 @@ namespace Theam.API.Controllers
             }
         }
 
-        // DELETE api/values/5
+        /// <summary>
+        /// Deletes a user from the system
+        /// </summary>
+        /// <param name="id">ID of the user to delete</param>
+        /// <returns>success true or false depending on the result of the deletion</returns>
         [HttpDelete("{id}")]
         public async Task<ActionResult<BaseResponse<UserDTO>>> Delete(int id)
         {

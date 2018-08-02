@@ -18,6 +18,9 @@ using Theam.API.Utils;
 
 namespace Theam.API.Controllers
 {
+    /// <summary>
+    /// Controller that manages the customer data
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
@@ -33,14 +36,21 @@ namespace Theam.API.Controllers
             _options = optionsAccesor.Value;
             _hostingEnvironment = hostingEnvironment;
         }
-        // GET api/values
+        /// <summary>
+        /// Gets the customer list
+        /// </summary>
+        /// <returns>the customer list</returns>
         [HttpGet]
         public async Task<ActionResult<BaseResponse<CustomerDTO[]>>> Get()
         {
             return CreateResponse(true, ImagesHelper.FillImagesURL(_mapper.Map<CustomerDTO[]>(await _repo.Get()), _options.ImagesBaseUrl));
         }
 
-        // GET api/values/5
+        /// <summary>
+        /// Gets a customer by id
+        /// </summary>
+        /// <param name="id">Id of the customer</param>
+        /// <returns>the customer data</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<BaseResponse<CustomerDTO>>> Get(int id)
         {
@@ -52,7 +62,11 @@ namespace Theam.API.Controllers
             return CreateResponse(true, ImagesHelper.FillImagesURL(_mapper.Map<CustomerDTO>(customers.First()), _options.ImagesBaseUrl));
         }
 
-        // POST api/values
+        /// <summary>
+        /// Inserts a customer in the system
+        /// </summary>
+        /// <param name="customer">the customer data</param>
+        /// <returns>the customer data with assigned ID</returns>
         [HttpPost]
         public async Task<ActionResult<BaseResponse<CustomerDTO>>> Post([FromForm] CustomerDTO customer)
         {
@@ -89,7 +103,12 @@ namespace Theam.API.Controllers
             }
         }
 
-        // PUT api/values/5
+        /// <summary>
+        /// Updates a customer in the system
+        /// </summary>
+        /// <param name="id">the customer ID</param>
+        /// <param name="customer">the customer data</param>
+        /// <returns>the customer data</returns>
         [HttpPut("{id}")]
         public async Task<ActionResult<BaseResponse<CustomerDTO>>> Put(int id, [FromForm] CustomerDTO customer)
         {
@@ -139,7 +158,11 @@ namespace Theam.API.Controllers
             }
         }
 
-        // DELETE api/values/5
+        /// <summary>
+        /// Deletes a customer from the system
+        /// </summary>
+        /// <param name="id">ID of the customer to delete</param>
+        /// <returns>success true or false depending on the result of the deletion</returns>
         [HttpDelete("{id}")]
         public async Task<ActionResult<BaseResponse<CustomerDTO>>> Delete(int id)
         {

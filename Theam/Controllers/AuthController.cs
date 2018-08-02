@@ -15,6 +15,9 @@ using Theam.API.Utils;
 
 namespace Theam.API.Controllers
 {
+    /// <summary>
+    /// Controller responsible of authenticate users and return authorization tokens
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class AuthController : BaseApiController
@@ -25,7 +28,12 @@ namespace Theam.API.Controllers
         {
             _options = optionsAccesor.Value;
         }
-
+        /// <summary>
+        /// Receives Email and Password, authenticates the user and return an authorization
+        /// token if authentication was succesfull
+        /// </summary>
+        /// <param name="request">TokenRequest object with Email and Password</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<BaseResponse<string>>> Token([FromBody] TokenRequest request)
         {
@@ -33,8 +41,10 @@ namespace Theam.API.Controllers
 
             if (users != null && users.Length > 0)
             {
+                //User was authenticated
                 var _user = users.First();
 
+                //Add claims
                 var claims = new List<Claim>();
                 claims.Add(new Claim(ClaimTypes.Email, request.Email));
 
@@ -43,6 +53,7 @@ namespace Theam.API.Controllers
                     claims.Add(new Claim(Constants.CLAIM_IS_ADMIN_USER, "1"));
                 }
 
+                //Generate Token
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecurityKey));
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 

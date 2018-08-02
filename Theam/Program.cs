@@ -12,8 +12,15 @@ using Theam.API.Data;
 
 namespace Theam
 {
+    /// <summary>
+    /// Initializes the web host where the app will run
+    /// </summary>
     public class Program
     {
+        /// <summary>
+        /// Main method that runs the app
+        /// </summary>
+        /// <param name="args"></param>
         public static void Main(string[] args)
         {
             var host = CreateWebHostBuilder(args).Build();
@@ -30,7 +37,11 @@ namespace Theam
 
             host.Run();
         }
-
+        /// <summary>
+        /// Builds the web host where the app will run
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>();

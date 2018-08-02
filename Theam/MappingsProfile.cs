@@ -4,6 +4,9 @@ using Theam.API.Models;
 
 namespace Theam
 {
+    /// <summary>
+    /// Automapper mappings profile where all mappings are defined
+    /// </summary>
     internal class MappingsProfile : Profile
     {
         public MappingsProfile()

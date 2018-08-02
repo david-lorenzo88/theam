@@ -6,8 +6,16 @@ using System.Threading.Tasks;
 
 namespace Theam.API.Utils
 {
+    /// <summary>
+    /// Helper class to generate and compare password hashes
+    /// </summary>
     public class PasswordHasherHelper
     {
+        /// <summary>
+        /// Computes a password hash
+        /// </summary>
+        /// <param name="plainText">the plainText</param>
+        /// <returns>the password hashed</returns>
         public static string ComputePassword(string plainText)
         {
             if (string.IsNullOrEmpty(plainText))
@@ -31,7 +39,12 @@ namespace Theam.API.Utils
             //Turn the combined salt+hash into a string for storage
             return Convert.ToBase64String(hashBytes);
         }
-
+        /// <summary>
+        /// Compares password in plainText with the password hash
+        /// </summary>
+        /// <param name="plainText">the plainText password</param>
+        /// <param name="savedPasswordHash">the password hash</param>
+        /// <returns>true if passwords match, false otherwise</returns>
         public static bool ComparePassword(string plainText, string savedPasswordHash)
         {
             if (string.IsNullOrEmpty(plainText))

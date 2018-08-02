@@ -32,7 +32,10 @@ namespace Theam
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        ///  This method gets called by the runtime to add services to the container.
+        /// </summary>
+        /// <param name="services">Service Collection</param>
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<MyOptions>(Configuration.GetSection("Settings"));
@@ -98,7 +101,11 @@ namespace Theam
 
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// This method gets called by the runtime to configure the HTTP request pipeline.
+        /// </summary>
+        /// <param name="app">Application builder</param>
+        /// <param name="env">Environment</param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseAuthentication();

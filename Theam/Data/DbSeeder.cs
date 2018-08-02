@@ -8,8 +8,15 @@ using Theam.API.Utils;
 
 namespace Theam.API.Data
 {
+    /// <summary>
+    /// Class responsible of initializating database the first time
+    /// with initial data
+    /// </summary>
     public static class DbSeeder
     {
+        /// <summary>
+        /// Initializes the database the first time with initial data
+        /// </summary>
         public static async Task Initialize(ApiContext context)
         {
             await context.Database.MigrateAsync();
@@ -36,10 +43,10 @@ namespace Theam.API.Data
 
                 await context.Users.AddAsync(new User
                 {
-                    Name = "David",
+                    Name = "David Admin",
                     Surname = "Lorenzo",
                     Password = PasswordHasherHelper.ComputePassword("David123"),
-                    Email = "dlorenzo.1988@gmail.com",
+                    Email = "admin@test.com",
                     Roles = new List<UserRole>
                     {
                         new UserRole {Role = adminRole }
@@ -49,10 +56,10 @@ namespace Theam.API.Data
 
                 await context.Users.AddAsync(new User
                 {
-                    Name = "David 2",
-                    Surname = "Lorenzo 2",
+                    Name = "David User",
+                    Surname = "Lorenzo",
                     Password = PasswordHasherHelper.ComputePassword("David123"),
-                    Email = "joanaydavid@gmail.com",
+                    Email = "user@test.com",
                     Roles = new List<UserRole>
                     {
                         new UserRole{Role = userRole }

@@ -16,6 +16,7 @@ namespace Theam.Tests
     {
         protected HttpClient GetClient()
         {
+            //Create Test Server
             var builder = WebHost.CreateDefaultBuilder()
                 .UseStartup<Startup>();
 
@@ -31,9 +32,8 @@ namespace Theam.Tests
                     DbSeeder.Initialize(context).Wait();
                 }
             }
-
+            //Create and configure Client
             var client = server.CreateClient();
-            
             client.DefaultRequestHeaders.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 

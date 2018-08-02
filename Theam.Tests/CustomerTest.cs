@@ -36,6 +36,21 @@ namespace Theam.Tests
             return result.result;
         }
 
+        private async Task<BaseResponse<T>> PostAsync<T>(string controllerName, HttpContent content)
+        {
+            var response = await _client.PostAsync($"/api/{controllerName}", content);
+            response.EnsureSuccessStatusCode();
+            var stringResponse = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<BaseResponse<T>>(stringResponse);
+        }
+
+        private async Task<BaseResponse<T>> GetAsync<T>(string controllerName, string id = null)
+        {
+            var response = await _client.GetAsync($"/api/{controllerName}/{id}");
+            response.EnsureSuccessStatusCode();
+            var stringResponse = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<BaseResponse<T>>(stringResponse);
+        }
 
         [Theory]
         [InlineData("customers")]
@@ -50,18 +65,11 @@ namespace Theam.Tests
                 content.Add(new StringContent("Test API"), "Name");
                 content.Add(new StringContent("testing"), "Surname");
 
-                var response = await _client.PostAsync($"/api/{controllerName}", content);
-                response.EnsureSuccessStatusCode();
-
-                var stringResponse = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<BaseResponse<Customer>>(stringResponse);
+                var result = await PostAsync<Customer>(controllerName, content);
 
                 Assert.NotNull(result?.result);
 
-                var responseGet = await _client.GetAsync($"/api/{controllerName}/{result.result.Id}");
-                responseGet.EnsureSuccessStatusCode();
-                var stringResponseGet = await responseGet.Content.ReadAsStringAsync();
-                var resultGet = JsonConvert.DeserializeObject<BaseResponse<Customer>>(stringResponseGet);
+                var resultGet = await GetAsync<Customer>(controllerName, result.result.Id.ToString());
 
                 Assert.NotNull(result?.result);
 
@@ -82,17 +90,12 @@ namespace Theam.Tests
                 content.Add(new StringContent("Test API"), "Name");
                 content.Add(new StringContent("testing"), "Surname");
 
-                var response = await _client.PostAsync($"/api/{controllerName}", content);
-                response.EnsureSuccessStatusCode();
+                var result = await PostAsync<Customer>(controllerName, content);
 
-                var responseGet = await _client.GetAsync($"/api/{controllerName}");
-                responseGet.EnsureSuccessStatusCode();
-                var stringResponseGet = await responseGet.Content.ReadAsStringAsync();
-                var resultGet = JsonConvert.DeserializeObject<BaseResponse<List<Customer>>>(stringResponseGet);
+                var resultGet = await GetAsync<List<Customer>>(controllerName);
 
                 Assert.NotNull(resultGet?.result);
                 Assert.NotEmpty(resultGet.result);
-
             }
         }
     }
