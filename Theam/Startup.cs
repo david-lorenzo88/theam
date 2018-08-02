@@ -13,7 +13,6 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Theam.API.Utils;
 using System.Net;
-using Theam.API.Filters;
 using System.Linq;
 using System.IO;
 using Swashbuckle.AspNetCore.Swagger;
