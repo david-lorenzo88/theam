@@ -56,7 +56,7 @@ namespace Theam.Tests
         [InlineData("customers")]
         public async Task CustomerInsertAndRead(string controllerName)
         {
-            var token = await GetToken("joanaydavid@gmail.com", "David123");
+            var token = await GetToken("user@test.com", "David123");
 
             _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
@@ -81,7 +81,7 @@ namespace Theam.Tests
         [InlineData("customers")]
         public async Task CustomersList(string controllerName)
         {
-            var token = await GetToken("joanaydavid@gmail.com", "David123");
+            var token = await GetToken("user@test.com", "David123");
             
             _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
