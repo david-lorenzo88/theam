@@ -87,5 +87,91 @@ If you open the swagger page on the browser you should see the Swagger UI:
 You can also use [Postman](https://www.getpostman.com/) to make requests to the API
 7. In order to run the test project and see the test results, you can do it also from inside Visual Studio, or from the command line where you should move to the Theam.Tests folder and run the following command:
 `dotnet test`
+## Create Continuous Deployment Pipeline
+In order to create the CI Pipeline we first need to meet requirements indicated in the section above, that I will repeat here:
+- Create an Azure Account: https://azure.microsoft.com/es-es/free/
+- Create a Visual Studio Team Services Account: https://azure.microsoft.com/es-es/services/visual-studio-team-services/
+- Create a Github Account: https://github.com/join
+- Download Docker: https://store.docker.com/search?offering=community&type=edition
 
+After having all this requirements met. We need to do some more steps:
 
+ 1. Create an Azure Resource Manager Service Endpoint that will allow us to connect the different artifacts from Visual Studio Team Services with our Azure Account. For this step you can follow this blog post that explains in detail how to do it: http://www.donovanbrown.com/post/Creating-an-Azure-Resource-Manager-Service-Endpoint
+ When finished, we will have configured a Service Endpoint in Visual Studio Team Services pointing to our Azure subscription.
+ 2. Next step is to create Azure Container Registry (ACR), for what you can follow this Microsoft instructions: https://docs.microsoft.com/en-us/azure/container-registry/container-registry-get-started-portal
+ And you should collect the following data from the ACR resource in Azure:
+ - Username and password generated in Access Keys
+ - Login Server: [your-acr-name].azurecr.io
+ 3. Next Step will be install Docker (in my case Docker for Windows) that you can grab from here: https://store.docker.com/search?offering=community&type=edition
+ 4. Then you should add Docker support to the project. This step is not needed if you have cloned this repo and you are using .NET Core 2.1. In other case is better to add a correct DockerFile, just in case the one provided here doesn't work. 
+ To do this, using Visual Studio just right-click on the Theam.API Project and do Add -> Docker Support. It will add all required	 files to the project.
+ Then modify the file to look like this one (be aware of your version of .NET Core and change it accordingly)
+	 ```
+	 FROM microsoft/dotnet:2.1-aspnetcore-runtime AS base
+	WORKDIR /app
+	EXPOSE 80
+	EXPOSE 443
+
+	FROM microsoft/dotnet:2.1-sdk AS build
+	WORKDIR /src
+	COPY Theam/Theam.API.csproj Theam/
+	RUN dotnet restore Theam/Theam.API.csproj
+	COPY . .
+	WORKDIR /src/Theam
+	RUN dotnet build Theam.API.csproj -c Release -o /app
+
+	FROM build AS publish
+	RUN dotnet publish Theam.API.csproj -c Release -o /app
+
+	FROM base AS final
+	WORKDIR /app
+	COPY --from=publish /app .
+	ENTRYPOINT ["dotnet", "Theam.API.dll"]
+	 ```
+ 5. Create Web App for Container in Azure:
+- Go to Azure Portal
+- Create New Web App for Container with the following settings:
+- Image Source: Azure Container Registry
+- Repo Access: Public
+- Image and Tag: Select the image and latest tag
+- Give it an app name, select the Azure subscription, create a new resource group, and select service plan according to your needs.
+6. Go to VSTS and create a new Build Pipeline:
+- Give it a name and select Hosted Linux Preview as Agent queue.
+- This will create a phase called Phase 1. Click on that phase and change the name to Test Phase.
+- Change the Agent Queue to Hosted VS2017
+- Click on the + button right on the phase item, and Add a dotnet build task. 
+In the Path to project put this: `**/*.csproj` this will tell the task to search all .csproj files in all subfolders and build it.
+- Click again on the + of the Test phase and Add a Visual Studio Test task. The default configuration will work, but you can check "Code coverage enabled" checkbox just in case you want this information.
+- Now we have to create another phase, to build the docker image and push it to Azure. So click on the 3 dots button on the right of the Process item and click on Add agent phase.
+- Click on the new phase and rename it to Build Phase, in the Agent Queue select "inherit from pipeline", so it will take Linux Hosted Agent we selected when created the pipeline.
+- Click on the + button of Build Phase and add a .NET Core Tool Installer phase. In the Version field, put `2.1.300`. This task will install this version of .NET Core in the Agent Virtual Machine, this is needed just now because they don't have it installed by default, so if you don't do this, it will fail the build. Maybe in the future this task won't be needed.
+- Add a Docker task and call it Build API Image, with this configuration:
+	- Container Registry Type: Azure Container Registry
+	- Azure subscription: Select the Azure Resource Manager you created some steps before.
+	- Azure Container Registry: select the one you created just before.
+	- Action: Build an image
+	- Dockerfile: Theam/Dockerfile
+	- Build arguments: ` --pull` (be aware of the blank space just before the 2 semicolons)
+	- Build Context: $(Build.Repository.LocalPath)
+	- Check include latest tag
+- Creates another Docker task and call it Push API Image
+	- The configuration is the same than before, just changes the Action to: Push an image.
+
+	We have finished to create the Build Pipeline. Now click on the arrow next to Save & queue and click Save, to only save the build pipeline.
+7.  Next step is to create a Release Pipeline for this Build. Click on the Releases menu item and click on the + button to Create a new Release Pipeline. 
+- In the template select Empty Process
+- Click on Add an Artifact, select Source Type = Build, Project = your VSTS project, and Source = Your build pipeline created just before, and click on Add button.
+- On the right side is the Environment, we will deploy the Docker imaged created in the Build Phase to an Azure Web App for Container. 
+- Click on the Environment 1 and rename it if you wish.
+- Now click below the name where is the link 1 phase, 1 task. This will open the pipeline editor. 
+- Click on the Agent phase and select Hosted VS 2017 as the Agent Queue.
+- Click on the + button to add a task, and add Azure App Service Deploy.
+- In the task configuration you have to select your Azure Resource Manager like before.
+- App type = Web App
+- App service name = select the one you created some steps before.
+- Image source = Container Registry
+- Registry = the login server address of your container registry
+- Image = your image name
+- Leave the rest as default and save the Release pipeline.
+8. Return to the Build pipeline, click on Edit and go to Triggers Tab. Enable continuous integration, enable Batch changes while a build is in progress and select the branch or branches from where you want to pull the code.
+This step will activate the build and deploy every time a commit arrives to one of the branches selected here.
