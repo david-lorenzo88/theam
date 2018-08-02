@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Theam.API.Data;
-using Theam.API.Filters;
 using Theam.API.Models;
 using Theam.API.Repositories;
 using Theam.API.Utils;
