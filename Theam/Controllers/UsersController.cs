@@ -95,7 +95,7 @@ namespace Theam.API.Controllers
                 {
                     return CreateResponse<UserDTO>(false, null, GetModelStateErrors());
                 }
-                var users = await _userRepo.Get(u => u.Id == id);
+                var users = await _userRepo.Get(u => u.Id == id, tracking: false);
 
                 if (users == null || users.Length == 0)
                 {
@@ -129,7 +129,7 @@ namespace Theam.API.Controllers
         {
             try
             {
-                var users = await _userRepo.Get(u => u.Id == id);
+                var users = await _userRepo.Get(u => u.Id == id, tracking: false);
 
                 if (users == null || users.Length == 0)
                 {

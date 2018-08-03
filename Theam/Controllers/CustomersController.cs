@@ -118,7 +118,7 @@ namespace Theam.API.Controllers
                     return CreateResponse<CustomerDTO>(false, null, GetModelStateErrors());
                 }
 
-                var customers = await _repo.Get(u => u.Id == id);
+                var customers = await _repo.Get(u => u.Id == id, tracking: false);
 
                 if (customers == null || customers.Length == 0)
                 {
@@ -167,7 +167,7 @@ namespace Theam.API.Controllers
         {
             try
             {
-                var customers = await _repo.Get(u => u.Id == id);
+                var customers = await _repo.Get(u => u.Id == id, tracking: false);
 
                 if (customers == null || customers.Length == 0)
                 {

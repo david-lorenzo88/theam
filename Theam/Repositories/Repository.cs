@@ -35,22 +35,38 @@ namespace Theam.API.Repositories
             T existing = _unitOfWork.Context.Set<T>().Find(entityId);
             if (existing != null) _unitOfWork.Context.Set<T>().Remove(existing);
         }
+
+        public async Task<bool> Exists(Expression<Func<T, bool>> predicate, bool tracking = true)
+        {
+            return (await _unitOfWork.Context.Set<T>().CountAsync(predicate)) > 0;
+        }
+
         /// <summary>
         /// Gets all entities from the context
         /// </summary>
         /// <returns></returns>
-        public Task<T[]> Get()
+        public Task<T[]> Get(bool tracking = true)
         {
-            return _unitOfWork.Context.Set<T>().ToArrayAsync<T>();
+            var set = _unitOfWork.Context.Set<T>().AsQueryable();
+            if (!tracking)
+            {
+                set = set.AsNoTracking();
+            }
+            return set.ToArrayAsync<T>();
         }
         /// <summary>
         /// Gets filtered entities from the context
         /// </summary>
         /// <param name="predicate">the filter predicate</param>
         /// <returns></returns>
-        public Task<T[]> Get(Expression<Func<T, bool>> predicate)
+        public Task<T[]> Get(Expression<Func<T, bool>> predicate, bool tracking = true)
         {
-            return _unitOfWork.Context.Set<T>().Where(predicate).ToArrayAsync<T>();
+            var set = _unitOfWork.Context.Set<T>().Where(predicate);
+            if (!tracking)
+            {
+                set = set.AsNoTracking();
+            }
+            return set.ToArrayAsync<T>();
         }
         /// <summary>
         /// Commits the changes from the context to the database
