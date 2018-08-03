@@ -178,3 +178,4 @@ This step will activate the build and deploy every time a commit arrives to one 
 
 ## Video
 
+[![Alt text](https://www.youtube.com/upload_thumbnail?v=sy0VXbE0yqA&t=hqdefault&ts=1533306434457)](https://youtu.be/sy0VXbE0yqA)

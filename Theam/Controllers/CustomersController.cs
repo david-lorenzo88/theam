@@ -124,9 +124,10 @@ namespace Theam.API.Controllers
                 {
                     return CreateResponse<CustomerDTO>(false, null, "User not found");
                 }
-                var oldCustomer = customers.First();
+                var oldCustomer = _mapper.Map<CustomerDTO>(customers.First());
 
                 customer.Id = id;
+                customer.UserCreated = oldCustomer.UserCreated;
                 customer.UserModified = await GetCurrentUser();
 
                 if (customer.ImageFile != null && customer.ImageFile.Length > 0)
