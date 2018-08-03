@@ -16,6 +16,8 @@ namespace Theam.API.Utils
         public const string POLICIY_ADMIN_USER = "AdminUser";
         //Roles
         public const string ROLE_ADMIN = "Admin";
+        public const int ROLE_ADMIN_ID = 1;
         public const string ROLE_USER = "User";
+        public const int ROLE_USER_ID = 2;
     }
 }

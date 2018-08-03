@@ -25,10 +25,12 @@ namespace Theam.API.Data
             {
                 await context.Roles.AddAsync(new Role
                 {
+                    Id = Constants.ROLE_ADMIN_ID,
                     Name = Constants.ROLE_ADMIN
                 });
                 await context.Roles.AddAsync(new Role
                 {
+                    Id = Constants.ROLE_USER_ID,
                     Name = Constants.ROLE_USER
                 });
 
@@ -38,8 +40,8 @@ namespace Theam.API.Data
             if (!context.Users.Any())
             {
 
-                var adminRole = await context.Roles.FirstOrDefaultAsync(r => r.Name == Constants.ROLE_ADMIN);
-                var userRole = await context.Roles.FirstOrDefaultAsync(r => r.Name == Constants.ROLE_USER);
+                var adminRole = await context.Roles.FirstOrDefaultAsync(r => r.Id == Constants.ROLE_ADMIN_ID);
+                var userRole = await context.Roles.FirstOrDefaultAsync(r => r.Id == Constants.ROLE_USER_ID);
 
                 await context.Users.AddAsync(new User
                 {

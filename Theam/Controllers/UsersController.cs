@@ -21,9 +21,10 @@ namespace Theam.API.Controllers
     [Authorize(Policy = Constants.POLICIY_ADMIN_USER)]
     public class UsersController : BaseApiController
     {
-        
-        public UsersController(IRepository<User> repo, IMapper mapper) : base(mapper, repo)
+        private readonly IRepository<Role> _rolesRepo;
+        public UsersController(IRepository<User> repo, IMapper mapper, IRepository<Role> rolesRepo) : base(mapper, repo)
         {
+            _rolesRepo = rolesRepo;
         }
         /// <summary>
         /// Gets the users list
@@ -67,9 +68,11 @@ namespace Theam.API.Controllers
                     return CreateResponse<UserDTO>(false, null, GetModelStateErrors());
                 }
                 user.Password = PasswordHasherHelper.ComputePassword(user.Password);
-                _userRepo.Add(_mapper.Map<User>(user));
+                user.Roles = await GetRoles(user);
+                var dao = _mapper.Map<User>(user);
+                _userRepo.Add(dao);
                 await _userRepo.SaveAsync();
-                return CreateResponse(true, _mapper.Map<UserDTO>((await _userRepo.Get(u => u.Id == user.Id)).FirstOrDefault()));
+                return CreateResponse(true, _mapper.Map<UserDTO>(dao));
             }
             catch (Exception ex)
             {
@@ -103,10 +106,12 @@ namespace Theam.API.Controllers
                     user.Password = PasswordHasherHelper.ComputePassword(user.Password);
                 }
                 user.Id = id;
-                _userRepo.Update(_mapper.Map<User>(user));
+                user.Roles = await GetRoles(user);
+                var dao = _mapper.Map<User>(user);
+                _userRepo.Update(dao);
                 await _userRepo.SaveAsync();
 
-                return CreateResponse(true, _mapper.Map<UserDTO>((await _userRepo.Get(u => u.Id == user.Id)).FirstOrDefault()));
+                return CreateResponse(true, _mapper.Map<UserDTO>(dao));
             }
             catch (Exception ex)
             {
@@ -130,7 +135,7 @@ namespace Theam.API.Controllers
                 {
                     return CreateResponse<UserDTO>(false, null, "User not found");
                 }
-                _userRepo.Delete(users.First());
+                _userRepo.Delete(users.First().Id);
                 await _userRepo.SaveAsync();
 
                 return CreateResponse<UserDTO>(true);
@@ -139,6 +144,38 @@ namespace Theam.API.Controllers
             {
                 return CreateResponse<UserDTO>(false, null, ex.Message);
             }
+        }
+
+        private async Task<List<UserRoleDTO>> GetRoles(UserDTO user)
+        {
+            if (user.Roles == null || user.Roles.Count == 0)
+            {
+                //By default assign user role if we don't receive anything
+                var userRole = await _rolesRepo.Get(r => r.Id == Constants.ROLE_USER_ID);
+                if (userRole != null && userRole.Length > 0)
+                {
+                    user.Roles = new List<UserRoleDTO>
+                    {
+                        new UserRoleDTO
+                        {
+                            Role = _mapper.Map<RoleDTO>(userRole.First())
+                        }
+                    };
+                }
+            }
+            else
+            {
+                foreach (var role in user.Roles)
+                {
+                    var dbRole = await _rolesRepo.Get(r => r.Id == role.Role.Id);
+                    if (dbRole != null && dbRole.Length > 0)
+                    {
+                        role.Role = _mapper.Map<RoleDTO>(dbRole.First());
+                    }
+                }
+            }
+
+            return user.Roles;
         }
     }
 }

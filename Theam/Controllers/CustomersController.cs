@@ -83,7 +83,7 @@ namespace Theam.API.Controllers
                 if (customer.ImageFile != null && customer.ImageFile.Length > 0)
                 {
                     //Handle image upload
-                    var directoryPath = Path.Combine(_hostingEnvironment.WebRootPath, _options.ImagesUploadPath);
+                    var directoryPath = Path.Combine(_hostingEnvironment.WebRootPath ?? _hostingEnvironment.ContentRootPath, _options.ImagesUploadPath);
 
                     var fileName = await SaveFile(customer.ImageFile, directoryPath);
 
@@ -132,7 +132,7 @@ namespace Theam.API.Controllers
                 if (customer.ImageFile != null && customer.ImageFile.Length > 0)
                 {
                     //Handle image upload
-                    var directoryPath = Path.Combine(_hostingEnvironment.WebRootPath, _options.ImagesUploadPath);
+                    var directoryPath = Path.Combine(_hostingEnvironment.WebRootPath ?? _hostingEnvironment.ContentRootPath, _options.ImagesUploadPath);
 
                     if (!string.IsNullOrEmpty(oldCustomer.Url))
                     {
@@ -173,7 +173,15 @@ namespace Theam.API.Controllers
                 {
                     return CreateResponse<CustomerDTO>(false, null, "Customer not found");
                 }
-                _repo.Delete(customers.First());
+                var cust = customers.First();
+
+                if (!string.IsNullOrEmpty(cust.Url))
+                {
+                    //Delete image file
+                    var directoryPath = Path.Combine(_hostingEnvironment.WebRootPath ?? _hostingEnvironment.ContentRootPath, _options.ImagesUploadPath);    
+                    DeleteFile(Path.Combine(directoryPath, Path.GetFileName(cust.Url)));
+                }
+                _repo.Delete(cust.Id);
                 await _repo.SaveAsync();
 
                 return CreateResponse<CustomerDTO>(true);

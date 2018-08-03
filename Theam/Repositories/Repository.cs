@@ -30,9 +30,9 @@ namespace Theam.API.Repositories
         /// Deletes an entity from the context
         /// </summary>
         /// <param name="entity">the entity</param>
-        public void Delete(T entity)
+        public void Delete(object entityId)
         {
-            T existing = _unitOfWork.Context.Set<T>().Find(entity);
+            T existing = _unitOfWork.Context.Set<T>().Find(entityId);
             if (existing != null) _unitOfWork.Context.Set<T>().Remove(existing);
         }
         /// <summary>

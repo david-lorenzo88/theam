@@ -12,6 +12,8 @@ namespace Theam
         public MappingsProfile()
         {
             CreateMap<Role, RoleDTO>().ReverseMap();
+            CreateMap<UserRoleDTO, UserRole>()
+                .ForMember(dest => dest.RoleId, opt => opt.MapFrom(src => src.Role.Id));
             CreateMap<User, UserDTO>()
                 //We leave this unmapped so Password won't be returned in users API response
                 .ForMember(dest => dest.Password, opt => opt.Ignore());

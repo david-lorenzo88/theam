@@ -9,6 +9,7 @@ namespace Theam.API.Models
     public class User
     {
         [Required]
+        [Key]
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }

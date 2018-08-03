@@ -69,6 +69,7 @@ namespace Theam
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IRepository<Customer>, Repository<Customer>>();
             services.AddScoped<IRepository<User>, Repository<User>>();
+            services.AddScoped<IRepository<Role>, Repository<Role>>();
 
             services.AddAutoMapper(x => x.AddProfile(new MappingsProfile()));
 
