@@ -175,3 +175,6 @@ In the Path to project put this: `**/*.csproj` this will tell the task to search
 - Leave the rest as default and save the Release pipeline.
 8. Return to the Build pipeline, click on Edit and go to Triggers Tab. Enable continuous integration, enable Batch changes while a build is in progress and select the branch or branches from where you want to pull the code.
 This step will activate the build and deploy every time a commit arrives to one of the branches selected here.
+
+## Video
+
