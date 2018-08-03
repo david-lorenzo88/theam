@@ -178,4 +178,6 @@ This step will activate the build and deploy every time a commit arrives to one 
 
 ## Video
 
-[![Alt text](https://www.youtube.com/upload_thumbnail?v=sy0VXbE0yqA&t=hqdefault&ts=1533306434457)](https://youtu.be/sy0VXbE0yqA)
+In this video I show and explain better the CI/CD process and configuration:
+
+[![Alt text](https://img.youtube.com/vi/sy0VXbE0yqA/0.jpg)](https://www.youtube.com/watch?v=sy0VXbE0yqA)
