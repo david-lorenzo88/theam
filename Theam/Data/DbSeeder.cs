@@ -19,7 +19,11 @@ namespace Theam.API.Data
         /// </summary>
         public static async Task Initialize(ApiContext context)
         {
-            await context.Database.MigrateAsync();
+            try
+            {
+                await context.Database.MigrateAsync();
+            }
+            catch { }
 
             if (!context.Roles.Any())
             {
