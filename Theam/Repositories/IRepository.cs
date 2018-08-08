@@ -13,6 +13,7 @@ namespace Theam.API.Repositories
         void Add(T entity);
         void Delete(object entityId);
         void Update(T entity);
+        void Detach(T entity);
         Task SaveAsync();
     }
 }

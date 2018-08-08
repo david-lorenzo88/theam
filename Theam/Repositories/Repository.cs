@@ -85,5 +85,12 @@ namespace Theam.API.Repositories
             _unitOfWork.Context.Entry(entity).State = EntityState.Modified;
             _unitOfWork.Context.Set<T>().Attach(entity);
         }
+        /// <summary>
+        /// Detach the specified entity.
+        /// </summary>
+        /// <param name="entity">Entity.</param>
+        public void Detach(T entity){
+            _unitOfWork.Context.Entry(entity).State = EntityState.Detached;
+        }
     }
 }

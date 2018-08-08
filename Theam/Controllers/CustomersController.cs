@@ -118,17 +118,19 @@ namespace Theam.API.Controllers
                     return CreateResponse<CustomerDTO>(false, null, GetModelStateErrors());
                 }
 
-                var customers = await _repo.Get(u => u.Id == id, tracking: false);
+                var customers = await _repo.Get(u => u.Id == id);
 
                 if (customers == null || customers.Length == 0)
                 {
                     return CreateResponse<CustomerDTO>(false, null, "User not found");
                 }
-                var oldCustomer = _mapper.Map<CustomerDTO>(customers.First());
+                var oldCustomer = customers.First();
 
                 customer.Id = id;
-                customer.UserCreated = oldCustomer.UserCreated;
+                customer.UserCreated = _mapper.Map<UserDTO>(oldCustomer.UserCreated);
                 customer.UserModified = await GetCurrentUser();
+
+                _repo.Detach(oldCustomer);
 
                 if (customer.ImageFile != null && customer.ImageFile.Length > 0)
                 {
