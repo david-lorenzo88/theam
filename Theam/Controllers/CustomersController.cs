@@ -85,7 +85,7 @@ namespace Theam.API.Controllers
                     //Handle image upload
                     var directoryPath = Path.Combine(_hostingEnvironment.WebRootPath ?? _hostingEnvironment.ContentRootPath, _options.ImagesUploadPath);
 
-                    var fileName = await SaveFile(customer.ImageFile, directoryPath);
+                    var fileName = await FileHelper.SaveFile(customer.ImageFile, directoryPath);
 
                     var dbPath = Path.Combine(_options.ImagesUploadPath, fileName).Replace("\\", "/");
                     customer.Url = dbPath;   
@@ -140,10 +140,10 @@ namespace Theam.API.Controllers
                     if (!string.IsNullOrEmpty(oldCustomer.Url))
                     {
                         //There is old image, delete it
-                        DeleteFile(Path.Combine(directoryPath, Path.GetFileName(oldCustomer.Url)));
+                        FileHelper.DeleteFile(Path.Combine(directoryPath, Path.GetFileName(oldCustomer.Url)));
                     }
 
-                    var fileName = await SaveFile(customer.ImageFile, directoryPath);
+                    var fileName = await FileHelper.SaveFile(customer.ImageFile, directoryPath);
 
                     var dbPath = Path.Combine(_options.ImagesUploadPath, fileName).Replace("\\", "/");
                     customer.Url = dbPath;
@@ -182,7 +182,7 @@ namespace Theam.API.Controllers
                 {
                     //Delete image file
                     var directoryPath = Path.Combine(_hostingEnvironment.WebRootPath ?? _hostingEnvironment.ContentRootPath, _options.ImagesUploadPath);    
-                    DeleteFile(Path.Combine(directoryPath, Path.GetFileName(cust.Url)));
+                    FileHelper.DeleteFile(Path.Combine(directoryPath, Path.GetFileName(cust.Url)));
                 }
                 _repo.Delete(cust.Id);
                 await _repo.SaveAsync();

@@ -17,6 +17,7 @@ namespace Theam.API.Models
         [Required]
         public string Email { get; set; }
         [Required]
+        [MinLength(6)]
         public string Password { get; set; }
         public virtual List<UserRole> Roles { get; set; }
     }
